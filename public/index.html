@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SpoofCall</title>
+  <style>
+    body { background: #0a0a0a; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding-top: 80px; }
+    .box { background: #111; padding: 40px; border-radius: 12px; width: 360px; }
+    h2 { margin-bottom: 24px; }
+    input { width: 100%; padding: 12px; margin: 8px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
+    button { width: 100%; padding: 14px; background: #4f46e5; color: #fff; border: none; border-radius: 8px; cursor: pointer; margin-top: 12px; font-size: 16px; }
+    #status { margin-top: 16px; font-size: 14px; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>📞 SpoofCall</h2>
+    <input id="target"  placeholder="Number to call (+1xxxxxxxxxx)" />
+    <input id="spoof"   placeholder="Number to show (+1xxxxxxxxxx)" />
+    <button onclick="dial()">Call Now</button>
+    <div id="status"></div>
+  </div>
+  <script>
+    async function dial() {
+      const target = document.getElementById('target').value;
+      const spoof  = document.getElementById('spoof').value;
+      document.getElementById('status').innerText = 'Dialing...';
+      const r = await fetch('/call', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ target, spoof })
+      });
+      const d = await r.json();
+      document.getElementById('status').innerText = d.success ? '✅ Call initiated' : '❌ ' + d.error;
+    }
+  </script>
+</body>
+</html>
